@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="iLink:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="iLink.war">
+      <element id="artifact" artifact-name="iLink:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib" />
+      </element>
+    </root>
+  </artifact>
+</component>
