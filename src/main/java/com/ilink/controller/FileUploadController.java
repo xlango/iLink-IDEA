@@ -24,11 +24,11 @@ import io.swagger.annotations.Api;
 @Api(value = "文件管理接口", tags = { "文件管理接口" })
 public class FileUploadController {
 
-	@RequestMapping("/testView")
+	/*@RequestMapping("/testView")
 	public ModelAndView rdTest() {
 		ModelAndView mv = new ModelAndView("index");
 		return mv;
-	}
+	}*/
 
 	//上传文件会自动绑定到MultipartFile中
     @RequestMapping(value="/upload",method=RequestMethod.POST)
@@ -59,7 +59,7 @@ public class FileUploadController {
     @RequestMapping("/down")  
     public void down(HttpServletRequest request,HttpServletResponse response) throws Exception{  
         //模拟文件，myfile.txt为需要下载的文件  
-        String fileName = request.getSession().getServletContext().getRealPath("/WEB-INF/uploadfiles/")+"/1.txt";  
+        String fileName = request.getSession().getServletContext().getRealPath("/WEB-INF/uploadfiles/")+"/2.txt";
         //获取输入流  
         InputStream bis = new BufferedInputStream(new FileInputStream(new File(fileName)));  
         //假如以中文名下载的话  
