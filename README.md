@@ -23,10 +23,28 @@
 
 6.实现文件上传功能，在浏览器中上传文件报错：HTML+Jquery+ajax post提交SpringMVC服务端 <br>
 报错信息：java.io.EOFException: Unexpected EOF read on the socket  <br>
-解决方法：问题答案还不确定，好像是使用ajax异步传输的问题，换了用jsp页面直接form表单post方式提交解决了问题 <br>
-参考：   <br>
+解决方法：使用ajax异步传输的问题，换了用jsp页面直接form表单post方式提交解决了问题 <br>
+html使用jquery-form.js异步提交解决了问题。<br>
+参考：https://www.jb51.net/article/112440.htm   <br>
 
 7.git工具<br>
 (1)annotate:如何项目中有一行代码不知道是什么意思，在当前代码行右击，然后点击annotate查看当前行的作者<br>
 (2)移动所有改动之处    Previous Change 快捷键<br>
 (3)撤销，包括单个和项目改动之处    Revert快捷键<br>
+(4)提交代码遇到问题：Push rejected: Push to origin/master was rejected  <br>
+
+8.实现多文件同时上传，Controller接受参数使用MultipartFile[]数组，循环遍历上传 <br>
+
+9.jquery实现上传文件进度监听及进度条的实现<br>
+(1)原理:给XMLHttpRequest对象的upload属性绑定onprogress方法监听上传过程<br>
+(2)因为jQuery默认使用的XMLHttpRequest对象是内部生成的无法直接给jq的xhr绑定onprogress方法
+   所以只要给jQuery重新生成一个绑定了onprogress的XMLHttpRequest对象即可实现<br>
+(3)首先封装一个方法 传入一个监听函数 返回一个绑定了监听函数的XMLHttpRequest对象<br>
+(4)ajax请求时加：<br> xhr:xhrOnProgress(function(e){<br>
+                    var percent=e.loaded / e.total;//计算百分比   <br>
+                })<br>
+(5)参考：https://blog.csdn.net/qq_21119773/article/details/52796375   <br>
+
+
+
+

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Files Upload</title>
+    <link href="/iLink/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/iLink/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/iLink/css/animate.css" rel="stylesheet">
+    <link href="/iLink/css/plugins/dropzone/basic.css" rel="stylesheet">
+    <link href="/iLink/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+    <link href="/iLink/css/style.css" rel="stylesheet">
+    <link href="/iLink/css/plugins/sweetalert/sweetalert.css"
+          rel="stylesheet">
+    <link href="/iLink/css/HW.css" rel="stylesheet">
+</head>
+<body style="background:white;">
+<form action='' enctype="multipart/form-data" method="post" name="fileForm">
+    <table>
+        <tr>
+            <td>文件描述:</td>
+            <td><input type="text" name="description" class="form-control"></td>
+        </tr>
+        <tr>
+            <td>请选择文件:</td>
+            <td><input type="file" name="file" class="form-control"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button class="btn btn-primary" onclick="subimtOne()">提交</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+<div id="cover" class="HW_upload">请选择要上传的文件</div>
+
+
+</body>
+<!-- Mainly scripts -->
+<script src="/iLink/js/jquery-2.1.1.js"></script>
+<script src="/iLink/js/jquery-form.js"></script>
+<script src="/iLink/js/bootstrap.min.js"></script>
+<script src="/iLink/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/iLink/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="/iLink/js/inspinia.js"></script>
+<script src="/iLink/js/plugins/pace/pace.min.js"></script>
+
+<!-- DROPZONE -->
+<script src="/iLink/js/plugins/dropzone/dropzone.js"></script>
+<script src="/iLink/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+<script src="/iLink/js/HW.js"></script>
+<script type="text/javascript">
+
+          var xhr=new XMLHttpRequest(); xhr.upload.onprogress=function(e){}
+
+          var xhrOnProgress=function(fun) {
+              xhrOnProgress.onprogress = fun; //绑定监听
+              //使用闭包实现监听绑
+              return function() {
+                  //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
+                  var xhr = $.ajaxSettings.xhr();
+                  //判断监听函数是否为函数
+                  if (typeof xhrOnProgress.onprogress !== 'function')
+                      return xhr;
+                  //如果有监听函数并且xhr对象支持绑定时就把监听函数绑定上去
+                  if (xhrOnProgress.onprogress && xhr.upload) {
+                      xhr.upload.onprogress = xhrOnProgress.onprogress;
+                  }
+                  return xhr;
+              }
+          }
+
+
+
+      //上传单个文件
+      function subimtOne() {
+          var form = $("form[name=fileForm]");
+          var options = {
+              url: '/iLink/file/upload', //上传文件的路径
+              type: 'post',
+              xhr:xhrOnProgress(function(e){
+                  var percent=e.loaded / e.total;//计算百分比
+                  alert(percent);
+              })
+          };
+          form.ajaxSubmit(options);
+      }
+
+          var upload= new HW.Widget.upload.Create({
+              target:'#cover',//指定上传控件
+              url:"/iLink/file/upload",//上传地址
+              //设置允许上传的文件大小 单位为kb 默认为 4096
+              maxSize:2048,
+              //开启多文件上传
+              mult:false,
+              //设置上传按钮的文字
+              uploadText:'请选择要上传的文件',
+              //设置上传超时限制 单位为分钟 默认为20分钟
+              timeout:20,
+              //设置允许上传的文件类型 默认为['png','jpg','jpeg']
+              // accept:['jpg'],
+              //设置文件上传参数名 默认为HW_upload_input
+              inputName:'cover',
+              //设置控件为图片上传 默认为true 为false时则不开启文件预览
+              isImage:true,
+              //自定义文件检查函数 默认检测文件大小 类型
+              // fileCheck:function(file){return true;},
+              viewSize:[500,300],//设置图片预览框宽高 默认为400，300
+              viewImageWidth:70,//设置预览图片宽度默认为80
+              done:function(data){
+                  alert(data);//获得上传结束后服务器返回的数据
+              }
+          });
+</script>
+</html>

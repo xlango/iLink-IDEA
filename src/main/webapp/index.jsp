@@ -11,6 +11,7 @@
     <title>Title</title>
 </head>
 <body>
+单个文件上传
 <form action="/iLink/file/upload" enctype="multipart/form-data" method="post">
     <table>
         <tr>
@@ -26,6 +27,20 @@
             <td><input type="submit" value="上传"></td>
         </tr>
     </table>
+</form>
+
+<br><br><br><br><br><br>
+多文件上传
+<form action="/iLink/file/filesUpload" method="post"
+      enctype="multipart/form-data">
+    <p>
+        选择文件:<input type="file" name="files">
+    <p>
+        选择文件:<input type="file" name="files">
+    <p>
+        选择文件:<input type="file" name="files">
+    <p>
+        <input type="submit" value="提交">
 </form>
 </body>
 </html>
