@@ -25,7 +25,7 @@
             <td><input type="file" name="file" class="form-control"></td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td>
                 <button class="btn btn-primary" onclick="subimtOne()">提交</button>
             </td>
         </tr>
@@ -71,6 +71,7 @@
         <span class="sr-only"></span>
     </div>
 </div>
+    <button class="btn btn-primary" onclick="cancleSubmmit()">取消上传</button>
 </body>
 <!-- Mainly scripts -->
 <script src="/iLink/js/jquery-2.1.1.js"></script>
@@ -88,7 +89,8 @@
 <script src="/iLink/js/plugins/sweetalert/sweetalert.min.js"></script>
 <script type="text/javascript">
 
-    var xhr=new XMLHttpRequest(); xhr.upload.onprogress=function(e){}
+    var xhr=new XMLHttpRequest();
+    //xhr.upload.onprogress=function(e){}
 
     var xhrOnProgress=function(fun) {
         xhrOnProgress.onprogress = fun; //绑定监听
@@ -151,6 +153,23 @@
     $('#btn-download').click(function () {
         $(location).attr('href', '/iLink/file/down');
     });
+
+
+    //中途取消文件上传
+    function cancleSubmmit() {
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this imaginary file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes!",
+            closeOnConfirm: false
+        }, function () {
+            swal("Cancel!", "Your imaginary file has been Canceled.", "success");
+            location.reload();
+        });
+    }
 
 </script>
 </html>

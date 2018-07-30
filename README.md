@@ -45,6 +45,13 @@ html使用jquery-form.js异步提交解决了问题。<br>
                 })<br>
 (5)参考：https://blog.csdn.net/qq_21119773/article/details/52796375   <br>
 
+10.文件上传中途取消上传功能:没找到特别好的方式，直接使用location.reload()刷新了页面，上传中断。<br>
 
+11.实现文件解压 <br>
+(1)依赖jar包：zip：ant   rar：junrar  <br>
+(2)解压工具类参考：com.utils.CompressFileUtils.java  <br>
+(3)参考：https://www.cnblogs.com/fengguohoudejiyi/p/7631987.html
+
+  
 
 
