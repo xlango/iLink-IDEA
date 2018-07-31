@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ilink.utils.CompressFileUtils;
+import com.ilink.utils.FileUtil;
+import com.ilink.utils.RuntimeUtils;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,22 +53,30 @@ public class FileUploadController {
                          @RequestParam("file") MultipartFile file) throws Exception {
         logger.info(description);
         String path = request.getSession().getServletContext().getRealPath("/WEB-INF/uploadfiles/");
-        logger.info(path);
         String fileName = file.getOriginalFilename();
-        File dir = new File(path, fileName);
-        if (!dir.exists()) {
-            dir.mkdirs(); //mkdirs()建立多级文件目录，mkdir()只能建立一级文件目录
+
+        //上传文件
+        Boolean uploadTage= FileUtil.uploadOne(request,file,path);
+
+        if (uploadTage){
+            String a[] = fileName.split("\\.");
+            String saveUnZipPath=a[0];
+
+            //解压缩,上传的压缩包存放在zips目录下，解压后的文件存在projects目录下
+            Boolean compressTage=CompressFileUtils.unZipFiles(path+fileName,path);
+            if (compressTage){
+                //执行配置文件
+                String command = "cmd.exe /c start hello.bat";//命令行命令
+                Process process = RuntimeUtils.exec(command, null, path+saveUnZipPath);
+                int i = process.waitFor();
+                logger.info(i);
+            }else {
+                return "compress fail";
+            }
+            return "success";
+        }else {
+            return "upload fail";
         }
-        //MultipartFile自带的解析方法
-        file.transferTo(dir);
-
-        String a[] = fileName.split("\\.");
-        String saveUnZipPath=a[0];
-        logger.info("filename:"+fileName+"  "+"zipp:"+saveUnZipPath);
-        //解压缩,上传的压缩包存放在zips目录下，解压后的文件存在projects目录下
-        CompressFileUtils.unZipFiles(dir,path);
-        return "success";
-
     }
 
 
