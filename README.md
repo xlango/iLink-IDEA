@@ -45,7 +45,18 @@ html使用jquery-form.js异步提交解决了问题。<br>
                 })<br>
 (5)参考：https://blog.csdn.net/qq_21119773/article/details/52796375   <br>
 
-10.java执行shell命令行
+10.java执行shell命令行 <br>
+  (1)主要方法：Runtime.getRuntime().exec(args, envps, new File(dir)) <br>
+  (2)参数： <br>
+         args： 命令行数组 例如：cmd.exe /c  startup.bat <br>
+         envps: 环境变量 <br>
+         dir: 执行文件路径 <br>
+  (3)参考：http://zohan.iteye.com/blog/1709136  <br>
+  
+11.文件解压  <br>
+  (1)依赖jar包：ant(.zip)、junrar(.rar)  <br> 
+  (2)参考工具类：com.iLink.utils.CompressFileUtils <br>
+  (3)参考：https://blog.csdn.net/ljheee/article/details/52736091 <br>
 
 
 

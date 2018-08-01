@@ -75,10 +75,10 @@ public class CompressFileUtils {
      * @param srcRarPath 原始rar路径
      * @param dstDirectoryPath 解压到的文件夹
      */
-    public static void unRarFile(String srcRarPath, String dstDirectoryPath) {
+    public static Boolean unRarFile(String srcRarPath, String dstDirectoryPath) {
         if (!srcRarPath.toLowerCase().endsWith(".rar")) {
             System.out.println("非rar文件！");
-            return;
+            return false;
         }
         File dstDiretory = new File(dstDirectoryPath);
         if (!dstDiretory.exists()) {// 目标目录不存在时，创建该文件夹
@@ -117,8 +117,9 @@ public class CompressFileUtils {
                 }
                 a.close();
             }
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            return false;
         }
     }
 }

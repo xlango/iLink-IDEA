@@ -45,7 +45,14 @@ public class FileUploadController {
         return mv;
     }
 
-    //上传文件会自动绑定到MultipartFile中
+    /**
+     * 上传文件自动解压，命令行执行相关文件
+     * @param request
+     * @param description
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ApiOperation(value = "上传单个文件", httpMethod = "POST", notes = "上传单个文件")
     public String upload(HttpServletRequest request,
@@ -56,18 +63,31 @@ public class FileUploadController {
         String fileName = file.getOriginalFilename();
 
         //上传文件
-        Boolean uploadTage= FileUtil.uploadOne(request,file,path);
+        Boolean uploadTage= FileUtil.upload(file,path);
 
         if (uploadTage){
             String a[] = fileName.split("\\.");
             String saveUnZipPath=a[0];
 
-            //解压缩,上传的压缩包存放在zips目录下，解压后的文件存在projects目录下
-            Boolean compressTage=CompressFileUtils.unZipFiles(path+fileName,path);
+            Boolean compressTage=false;
+            if (a[1].toLowerCase().equals("zip")){
+                //解压缩,上传的压缩包存放在zips目录下，解压后的文件存在projects目录下
+                compressTage=CompressFileUtils.unZipFiles(path+fileName,path);
+            }else if(a[1].toLowerCase().equals("rar")){
+                compressTage=CompressFileUtils.unRarFile(path+fileName,path);
+            }else {
+                return "file type error";
+            }
+
             if (compressTage){
                 //执行配置文件
-                String command = "cmd.exe /c start hello.bat";//命令行命令
-                Process process = RuntimeUtils.exec(command, null, path+saveUnZipPath);
+                Process process = null;
+                /*String command = "sh " + path + saveUnZipPath + "/hello.sh";
+                String command1 = "chmod 777 " + path + saveUnZipPath+"hello.sh";
+                process = Runtime.getRuntime().exec(command1);
+                process.waitFor();*/
+                String command = "cmd.exe /c start hello.bat";
+                process = RuntimeUtils.exec(command, (String)null, path + saveUnZipPath);
                 int i = process.waitFor();
                 logger.info(i);
             }else {
@@ -87,28 +107,16 @@ public class FileUploadController {
      * @param response
      * @throws Exception
      */
-    @RequestMapping("/down")
+    @RequestMapping(value = "/down",method = RequestMethod.GET)
     @ApiOperation(value = "下载文件", httpMethod = "GET", notes = "下载文件")
-    public void down(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void down(HttpServletRequest request, HttpServletResponse response
+            ,@RequestParam("downfilename") String downfilename) throws Exception {
+        logger.info("下载文件名："+downfilename);
         //模拟文件，myfile.txt为需要下载的文件  
-        String fileName = request.getSession().getServletContext().getRealPath("/WEB-INF/uploadfiles/") + "/1.txt";
-        //获取输入流  
-        InputStream bis = new BufferedInputStream(new FileInputStream(new File(fileName)));
-        //假如以中文名下载的话  
-        String filename = "下载文件.txt";
-        //转码，免得文件名中文乱码  
-        filename = URLEncoder.encode(filename, "UTF-8");
-        //设置文件下载头  
-        response.addHeader("Content-Disposition", "attachment;filename=" + filename);
-        //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型    
-        response.setContentType("multipart/form-data");
-        BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
-        int len = 0;
-        while ((len = bis.read()) != -1) {
-            out.write(len);
-            out.flush();
-        }
-        out.close();
+        String filePath = request.getSession().getServletContext().getRealPath("/WEB-INF/uploadfiles/") + downfilename;
+
+        //文件下载
+        FileUtil.download(response,filePath,downfilename);
     }
 
 
@@ -122,13 +130,7 @@ public class FileUploadController {
                 MultipartFile file = files[i];
                 String path = request.getSession().getServletContext().getRealPath("/WEB-INF/uploadfiles/");
                 logger.info(path);
-                String fileName = file.getOriginalFilename();
-                File dir = new File(path, fileName);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                //MultipartFile自带的解析方法
-                file.transferTo(dir);
+                FileUtil.upload(file,path);
             }
         }
 

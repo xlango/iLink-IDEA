@@ -58,7 +58,7 @@
 </form>
 
 <h2>文件下载</h2>
-测试下载文件：1.txt
+测试下载文件：<input type="text" id="filename" class="form-control">
 <button class="btn btn-primary" id="btn-download">下载</button>
 
 <br><br>
@@ -71,7 +71,7 @@
         <span class="sr-only"></span>
     </div>
 </div>
-    <button class="btn btn-primary" onclick="cancleSubmmit()">取消上传</button>
+<button class="btn btn-primary" onclick="cancleSubmmit()">取消上传</button>
 </body>
 <!-- Mainly scripts -->
 <script src="/iLink/js/jquery-2.1.1.js"></script>
@@ -89,13 +89,13 @@
 <script src="/iLink/js/plugins/sweetalert/sweetalert.min.js"></script>
 <script type="text/javascript">
 
-    var xhr=new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
     //xhr.upload.onprogress=function(e){}
 
-    var xhrOnProgress=function(fun) {
+    var xhrOnProgress = function (fun) {
         xhrOnProgress.onprogress = fun; //绑定监听
         //使用闭包实现监听绑
-        return function() {
+        return function () {
             //通过$.ajaxSettings.xhr();获得XMLHttpRequest对象
             var xhr = $.ajaxSettings.xhr();
             //判断监听函数是否为函数
@@ -116,11 +116,11 @@
         var options = {
             url: '/iLink/file/upload', //上传文件的路径
             type: 'post',
-            xhr:xhrOnProgress(function(e){
-                var percent=e.loaded / e.total;//计算百分比
-                $("#process-data").html(percent*100+'%');
-                var da=(percent*100)+'%';
-                $("#process").css("width",da);
+            xhr: xhrOnProgress(function (e) {
+                var percent = e.loaded / e.total;//计算百分比
+                $("#process-data").html(percent * 100 + '%');
+                var da = (percent * 100) + '%';
+                $("#process").css("width", da);
             })
         };
         form.ajaxSubmit(options);
@@ -140,18 +140,37 @@
         var options = {
             url: '/iLink/file/filesUpload', //上传文件的路径
             type: 'post',
-            xhr:xhrOnProgress(function(e){
-                var percent=e.loaded / e.total;//计算百分比
-                $("#process-data").html(percent*100+'%');
-                var da=(percent*100)+'%';
-                $("#process").css("width",da);
+            xhr: xhrOnProgress(function (e) {
+                var percent = e.loaded / e.total;//计算百分比
+                $("#process-data").html(percent * 100 + '%');
+                var da = (percent * 100) + '%';
+                $("#process").css("width", da);
             })
         };
         form.ajaxSubmit(options);
     }
 
     $('#btn-download').click(function () {
-        $(location).attr('href', '/iLink/file/down');
+        $(location).attr('href', '/iLink/file/down?downfilename='+$('#filename').val());
+        /*alert($('#filename').val());
+        $.ajax({
+            type: 'post',
+            url: "/iLink/file/down",
+            data:{'downfilename':$('#filename').val()} ,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (d) {
+                //var rdata = JSON.parse(d);
+                //alert(d);
+                if (d == "success") {
+                    swal("成功!", "上传成功:)", "success");
+                } else {
+                    swal("失败", "上传失败:(", "error");
+                }
+            }
+        });*/
+
     });
 
 
