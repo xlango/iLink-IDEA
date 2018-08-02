@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ilink.utils.CompressFileUtils;
+import com.ilink.utils.DesUtil;
 import com.ilink.utils.FileUtil;
 import com.ilink.utils.RuntimeUtils;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +48,7 @@ public class FileUploadController {
 
     /**
      * 上传文件自动解压，命令行执行相关文件
+     *
      * @param request
      * @param description
      * @param file
@@ -63,38 +65,46 @@ public class FileUploadController {
         String fileName = file.getOriginalFilename();
 
         //上传文件
-        Boolean uploadTage= FileUtil.upload(file,path);
+        Boolean uploadTage = FileUtil.upload(file, path);
 
-        if (uploadTage){
+        if (uploadTage) {
             String a[] = fileName.split("\\.");
-            String saveUnZipPath=a[0];
+            String saveUnZipPath = a[0];
 
-            Boolean compressTage=false;
-            if (a[1].toLowerCase().equals("zip")){
-                //解压缩,上传的压缩包存放在zips目录下，解压后的文件存在projects目录下
-                compressTage=CompressFileUtils.unZipFiles(path+fileName,path);
-            }else if(a[1].toLowerCase().equals("rar")){
-                compressTage=CompressFileUtils.unRarFile(path+fileName,path);
-            }else {
-                return "file type error";
-            }
+            //解密文件
+            Boolean decryptTag = DesUtil.decrypt(path + fileName, path + "2." + a[1]);
+            if (decryptTag) {
 
-            if (compressTage){
-                //执行配置文件
-                Process process = null;
+                //解压缩
+                Boolean compressTage = false;
+                if (a[1].toLowerCase().equals("zip")) {
+                    compressTage = CompressFileUtils.unZipFiles(path + "2." + a[1], path);
+                } else if (a[1].toLowerCase().equals("rar")) {
+                    compressTage = CompressFileUtils.unRarFile(path + "2." + a[1], path);
+                } else {
+                    return "file type error";
+                }
+
+                //执行命令
+                if (compressTage) {
+                    Process process = null;
                 /*String command = "sh " + path + saveUnZipPath + "/hello.sh";
                 String command1 = "chmod 777 " + path + saveUnZipPath+"hello.sh";
                 process = Runtime.getRuntime().exec(command1);
                 process.waitFor();*/
-                String command = "cmd.exe /c start hello.bat";
-                process = RuntimeUtils.exec(command, (String)null, path + saveUnZipPath);
-                int i = process.waitFor();
-                logger.info(i);
-            }else {
-                return "compress fail";
+                    String command = "cmd.exe /c start hello.bat";
+                    process = RuntimeUtils.exec(command, (String) null, path + saveUnZipPath);
+                    int i = process.waitFor();
+                    logger.info(i);
+                } else {
+                    return "compress fail";
+                }
+            } else {
+                return "decrypt fail";
             }
+
             return "success";
-        }else {
+        } else {
             return "upload fail";
         }
     }
@@ -107,16 +117,16 @@ public class FileUploadController {
      * @param response
      * @throws Exception
      */
-    @RequestMapping(value = "/down",method = RequestMethod.GET)
+    @RequestMapping(value = "/down", method = RequestMethod.GET)
     @ApiOperation(value = "下载文件", httpMethod = "GET", notes = "下载文件")
     public void down(HttpServletRequest request, HttpServletResponse response
-            ,@RequestParam("downfilename") String downfilename) throws Exception {
-        logger.info("下载文件名："+downfilename);
+            , @RequestParam("downfilename") String downfilename) throws Exception {
+        logger.info("下载文件名：" + downfilename);
         //模拟文件，myfile.txt为需要下载的文件  
         String filePath = request.getSession().getServletContext().getRealPath("/WEB-INF/uploadfiles/") + downfilename;
 
         //文件下载
-        FileUtil.download(response,filePath,downfilename);
+        FileUtil.download(response, filePath, downfilename);
     }
 
 
@@ -130,7 +140,7 @@ public class FileUploadController {
                 MultipartFile file = files[i];
                 String path = request.getSession().getServletContext().getRealPath("/WEB-INF/uploadfiles/");
                 logger.info(path);
-                FileUtil.upload(file,path);
+                FileUtil.upload(file, path);
             }
         }
 

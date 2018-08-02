@@ -56,7 +56,15 @@ html使用jquery-form.js异步提交解决了问题。<br>
 11.文件解压  <br>
   (1)依赖jar包：ant(.zip)、junrar(.rar)  <br> 
   (2)参考工具类：com.iLink.utils.CompressFileUtils <br>
-  (3)参考：https://blog.csdn.net/ljheee/article/details/52736091 <br>
+  (3)参考：https://blog.csdn.net/ljheee/ar ticle/details/52736091 <br>
+
+12.文件使用DES加密解密 <br>
+  (1)密钥，密钥长64位，实际参与运算的是56位 <br>
+  (2)在自定义配置文件DesKey.txt配置文件中配置：例如byte[]={-1,20,-13,90,70,50,-111,39} <br>
+  (3)获取文件路径方法（解决路径中带中文字符和空格问题）：DesUtil.class.getClassLoader().getResource("DesKey.txt").toURI().getPath() <br>
+   ---问题解决参考：https://www.cnblogs.com/tv151579/p/6220443.html  <br>
+  (4)参考：https://blog.csdn.net/feng______/article/details/40782347  <br>
+  
 
 
 
