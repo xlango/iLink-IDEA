@@ -75,13 +75,13 @@ html使用jquery-form.js异步提交解决了问题。<br>
      ---参考文章：http://zohan.iteye.com/blog/1709136<br>
   (5)文件加密解密  <br>
      -加密  <br>
-     ---生成密钥Key：<br>
-     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/autokey.png) <br>
-     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/getkey.png) <br>
-     ---文件加密方法：
-     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/jiami.png) <br>
-     ---文件解密方法：
-     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/jiemi.png) <br>
+     ---生成密钥Key：<br><br>
+     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/autokey.png) <br><br>
+     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/getkey.png) <br><br>
+     ---文件加密方法：<br>
+     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/jiami.png) <br><br>
+     ---文件解密方法：<br>
+     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/jiemi.png) <br><br>
   (6)总结至Github  README.md文件：https://github.com/xx132917/iLink-IDEA <br>
   (7)功能实现代码尚未完善，只考虑每个实现步骤实现成功的情况，可能出现的异常和操作失败的情况还未完善 <br>
 
