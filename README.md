@@ -62,10 +62,27 @@ html使用jquery-form.js异步提交解决了问题。<br>
   (1)密钥，密钥长64位，实际参与运算的是56位 <br>
   (2)在自定义配置文件DesKey.txt配置文件中配置：例如byte[]={-1,20,-13,90,70,50,-111,39} <br>
   (3)获取文件路径方法（解决路径中带中文字符和空格问题）：DesUtil.class.getClassLoader().getResource("DesKey.txt").toURI().getPath() <br>
-   ---问题解决参考：https://www.cnblogs.com/tv151579/p/6220443.html  <br>
+     ---问题解决参考：https://www.cnblogs.com/tv151579/p/6220443.html  <br>
   (4)参考：https://blog.csdn.net/feng______/article/details/40782347  <br>
   
-
-
+13.功能实现及描述： <br>
+  (1)流程：上传加密的压缩文件-->解密-->解压-->执行文件中的.sh文件或.bat文件 <br>
+  (2)上传文件：POST方式提交，服务端使用SpringMVC的MultipartFile <br>
+     ---参考文章：https://blog.csdn.net/jronzhang/article/details/61210700 <br>
+  (3)解压：使用jar包：ant(.zip)、junrar(.rar) <br>
+     ---参考文章： https://blog.csdn.net/ljheee/ar ticle/details/52736091 <br>
+  (4)java执行shell命令行：主要方法Runtime.getRuntime().exec(args, envps, new File(dir))<br>
+     ---参考文章：http://zohan.iteye.com/blog/1709136<br>
+  (5)文件加密解密  <br>
+     -加密  <br>
+     ---生成密钥Key：<br>
+     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/autokey.png) <br>
+     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/getkey.png) <br>
+     ---文件加密方法：
+     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/jiami.png) <br>
+     ---文件解密方法：
+     ![Image text](https://github.com/xx132917/iLink-IDEA/blob/master/readme-img/jiemi.png) <br>
+  (6)总结至Github  README.md文件：https://github.com/xx132917/iLink-IDEA <br>
+  (7)功能实现代码尚未完善，只考虑每个实现步骤实现成功的情况，可能出现的异常和操作失败的情况还未完善 <br>
 
 

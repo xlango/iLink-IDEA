@@ -72,7 +72,8 @@ public class FileUploadController {
             String saveUnZipPath = a[0];
 
             //解密文件
-            Boolean decryptTag = DesUtil.decrypt(path + fileName, path + "2." + a[1]);
+            Boolean decryptTag = (Boolean) DesUtil.decrypt(path + fileName, path + "2." + a[1]);
+
             if (decryptTag) {
 
                 //解压缩
